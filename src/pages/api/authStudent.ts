@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import puppeteer from "puppeteer";
 
-const authStudent = async(req: NextApiRequest, res: NextApiResponse) => {
+const authStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST": {
       return checkInfoStudents(req, res);
@@ -11,20 +11,20 @@ const authStudent = async(req: NextApiRequest, res: NextApiResponse) => {
       return getStudentsID(req, res);
     }
   }
-}
+};
 
 async function checkInfoStudents(req: NextApiRequest, res: NextApiResponse) {
   const pagePrimary =
     "http://www.portalacademico.uneb.br/PortalSagres/Acesso.aspx";
-  
-  const { matriculation, password } = req.body;
+
+  const result = JSON.parse(req.body);
 
   const browser = await puppeteer.launch({
-      headless: true, //false abre interface gráfica true não abre.
-      defaultViewport: null, //Tira o tamanho padrão 800x600
-      args: ["--disable-setuid-sandbox", "--start-maximized"], //permite que seja uma página http e página maximizada
-      ignoreHTTPSErrors: true,
-    });
+    headless: true, //false abre interface gráfica true não abre.
+    defaultViewport: null, //Tira o tamanho padrão 800x600
+    args: ["--disable-setuid-sandbox", "--start-maximized"], //permite que seja uma página http e página maximizada
+    ignoreHTTPSErrors: true,
+  });
 
   try {
     const page = await browser.newPage();
@@ -32,40 +32,37 @@ async function checkInfoStudents(req: NextApiRequest, res: NextApiResponse) {
     //O puppeter insere os dados de matrícula e senha nos campos e envia
     await page.type(
       '[name="ctl00$PageContent$LoginPanel$UserName"]',
-      `${matriculation}`
+      `${result.matriculation}`
     );
     await page.type(
-      '#ctl00_PageContent_LoginPanel_Password',
-      `${password}`
+      "#ctl00_PageContent_LoginPanel_Password",
+      `${result.password}`
     );
     await page.click('[type="submit"]');
-    await page.waitForNavigation(); //Espera o carregamento da página 
-      // Aqui dentro executará toda DOM do javascript
+    await page.waitForNavigation(); //Espera o carregamento da página
+    // Aqui dentro executará toda DOM do javascript
     let checkName = await page.evaluate(() => {
-      const name = document.querySelector(".usuario-nome")?.innerHTML
+      const name = document.querySelector(".usuario-nome")?.innerHTML;
       return {
-        name
+        name,
       };
     });
-    if (!checkName)
-    {
-      await page.click('[name="ctl00$btnLogin"]');//ctl00$btnLogin Se houver algum comunicado na página
+    if (!checkName) {
+      await page.click('[name="ctl00$btnLogin"]'); //ctl00$btnLogin Se houver algum comunicado na página
       await page.waitForNavigation();
       checkName = await page.evaluate(() => {
-        const name = document.querySelector(".usuario-nome")?.innerHTML
+        const name = document.querySelector(".usuario-nome")?.innerHTML;
         return {
-          name
+          name,
         };
       });
     }
     await browser.close();
-    if (checkName.name != undefined)
-    {
+    if (checkName.name != undefined) {
       res.status(200).send({
         name: checkName.name,
       });
-    }
-    else {
+    } else {
       return res.status(500).json({
         success: false,
       });
@@ -82,7 +79,9 @@ async function checkInfoStudents(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function getStudentsID(req: NextApiRequest, res: NextApiResponse) {
-  res.status(200).json({ result: 'Carteirinhas cadastradas no banco de dados' })
+  res
+    .status(200)
+    .json({ result: "Carteirinhas cadastradas no banco de dados" });
 }
 
-export default authStudent
+export default authStudent;

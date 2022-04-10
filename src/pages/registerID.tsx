@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import moment from "moment";
 import "moment/locale/pt-br";
 import { v4 as uuidv4 } from "uuid";
@@ -36,7 +36,7 @@ interface NextForm {
 
 moment.locale("pt-br");
 
-const Register: NextPage = () => {
+const Register: NextPage = (urlAPI: any) => {
   const { register, handleSubmit, reset } = useForm();
   const [name, setName] = useState(String);
   const [ok, setOk] = useState(false);
@@ -52,25 +52,28 @@ const Register: NextPage = () => {
   const registration: SubmitHandler<Form> = async (data) => {
     //Chamada a API para checar se a matricula está ok
     setLoading(true);
-    const res = await fetch("https://carteirinhauneb.vercel.app/api/authStudent", {
+
+    console.log({ data });
+
+    const res = await fetch(`${urlAPI.urlAPI}/api/authStudent`, {
       body: JSON.stringify({
         matriculation: data.matriculation,
         password: data.password,
       }),
       headers: {
         "Content-Type": "application/json, text/plain, */*",
-        "Access-Control-Allow-Origin":"*",
-        'User-Agent': '*'
+        "Access-Control-Allow-Origin": "*",
+        "User-Agent": "*",
       },
       method: "POST",
     });
+
     const result = await res.json();
     if (result.name != undefined) {
       setLoading(false);
       setOk(true);
       setName(result.name);
       reset(result);
-     
     } else if (res.status === 500) {
       setLoading(false);
       openAlert("Erro nos dados informados");
@@ -86,7 +89,7 @@ const Register: NextPage = () => {
     data.dateRegister = moment();
     data.dateRevalidate = moment().add(170, "days");
 
-    const res = await fetch("/api/registerStudent", {
+    const res = await fetch(`${process.env.URL}`, {
       body: JSON.stringify({
         ...data,
       }),
@@ -101,7 +104,7 @@ const Register: NextPage = () => {
   if (loading) {
     return (
       <C.Container>
-        <LoadingScreen/>
+        <LoadingScreen />
       </C.Container>
     );
   }
@@ -292,6 +295,12 @@ const Register: NextPage = () => {
       </C.FormRegister>
     </C.Container>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const urlAPI = `${process.env.URL}`;
+  return {
+    props: { urlAPI },
+  };
 };
 
 export default Register;

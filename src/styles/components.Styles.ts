@@ -1,7 +1,7 @@
 import styled from "styled-components";
 export const Nav = styled.div`
   width: 100%;
-  
+
   .CE {
     width: 13rem;
     height: auto;
@@ -86,7 +86,7 @@ export const CardModal = styled.div`
     "image image  data data data close"
     "university university university university university university";
   grid-gap: 1rem;
- 
+
   .image {
     grid-area: image;
   }
@@ -107,7 +107,7 @@ export const CardModal = styled.div`
     grid-area: university;
     display: flex;
   }
-  .close{
+  .close {
     grid-area: close;
     position: relative;
     height: 25px;
@@ -144,9 +144,9 @@ export const AlertCard = styled.div`
         : props.theme.colors.text.primary};
   }
   .close {
-   color: white;
-   height: 30px;
-   width: 30px;
+    color: white;
+    height: 30px;
+    width: 30px;
   }
 `;
 export const Loading = styled.div`
@@ -167,10 +167,11 @@ export const Loading = styled.div`
     width: 64px;
     height: 64px;
     margin: 8px;
-    border: 8px solid ${props => props.theme.colors.primary};
+    border: 8px solid ${(props) => props.theme.colors.primary};
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: ${props => props.theme.colors.primary} transparent transparent transparent;
+    border-color: ${(props) => props.theme.colors.primary} transparent
+      transparent transparent;
   }
   .lds-ring div:nth-child(1) {
     animation-delay: -0.45s;
