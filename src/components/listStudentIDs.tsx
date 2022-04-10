@@ -32,7 +32,7 @@ export default function Profile(urlAPI: any) {
     setShowModal={setShowModal}
   />;
 
-  return data.allStudentIDs.map((result: any) => (
+  return data.map((result: any) => (
     <div
       key={result.idStudent}
       onClick={() => openModal(result)}
