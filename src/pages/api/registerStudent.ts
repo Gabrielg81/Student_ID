@@ -1,7 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 
 import { NextApiRequest, NextApiResponse } from "next";
-import NextCors from "next";
 import { StudentCheckModel } from "../../db/models/StudentCheckModel";
 import * as bcrypt from "bcrypt";
 import { db } from "../../db/config";
@@ -52,7 +51,7 @@ async function registryID(req: NextApiRequest, res: NextApiResponse) {
 
 async function getRegistryID(req: NextApiRequest, res: NextApiResponse) {
   const allStudentIDs = await StudentCheckModel.findAll();
-  return allStudentIDs.length > 0
+  allStudentIDs.length > 0
     ? res
         .status(200)
         .setHeader("Content-Type", "application/json")

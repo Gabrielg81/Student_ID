@@ -53,8 +53,6 @@ const Register: NextPage = (urlAPI: any) => {
     //Chamada a API para checar se a matricula está ok
     setLoading(true);
 
-    console.log({ data });
-
     const res = await fetch(`${urlAPI.urlAPI}/api/authStudent`, {
       body: JSON.stringify({
         matriculation: data.matriculation,
@@ -99,7 +97,6 @@ const Register: NextPage = (urlAPI: any) => {
       method: "POST",
     });
     const result = await res.json();
-    console.log(result);
   };
   if (loading) {
     return (
