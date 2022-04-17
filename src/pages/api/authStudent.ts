@@ -17,7 +17,7 @@ async function checkInfoStudents(req: NextApiRequest, res: NextApiResponse) {
   const pagePrimary =
     "http://www.portalacademico.uneb.br/PortalSagres/Acesso.aspx";
 
-  const result = JSON.parse(req.body);
+  const result = req.body;
 
   const browser = await puppeteer.launch({
     headless: true, //false abre interface gráfica true não abre.
