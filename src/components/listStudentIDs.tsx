@@ -1,26 +1,27 @@
 import { GetServerSideProps } from "next";
 import { useState } from "react";
 import useSWR from "swr";
-import Modal from "../components/Modal";
+import Modal from "./Modal";
 
 const fetcher = (url: any) => fetch(url).then((res) => res.json());
 
-export default function Profile(urlAPI: any) {
-  console.log("url list: ", urlAPI);
+function Profile(urlAPI: any) {
   const universityImage =
     "http://www.ppghi.uneb.br/wp-content/uploads/2019/03/logo_uneb.svg";
   const universityName = "Universidade do Estado da Bahia";
   const { data, error } = useSWR(`${urlAPI.urlAPI}`, fetcher);
+
   const openModal = (student: any) => {
-    setShowModal((prev) => !prev);
+    console.log("student:", student);
+    setShowModal(true);
     setModalStudent(student);
   };
 
   const [showModal, setShowModal] = useState(false);
   const [modalStudent, setModalStudent] = useState({});
 
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  if (error) return <div>Falha ao listar!</div>;
+  if (!data) return <div>Carregando lista...</div>;
 
   <Modal
     student={modalStudent}
@@ -71,3 +72,4 @@ export default function Profile(urlAPI: any) {
     </div>
   ));
 }
+export default Profile;

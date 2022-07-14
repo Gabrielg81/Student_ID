@@ -1,10 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 
-import type { NextPage, GetServerSideProps } from "next";
+import { AnyAaaaRecord } from "dns";
+import type {
+  NextPage,
+  GetServerSideProps,
+  GetStaticProps,
+  GetStaticPropsContext,
+} from "next";
 import Head from "next/head";
 import { useState } from "react";
-import Profile from "../components/listStudentIDs";
+import Modal from "../components/Modal";
 
 import * as C from "../styles/pages.Styles";
 
@@ -36,10 +42,16 @@ const semester = [
 ];
 
 // const Home: NextPage = () => {
-const Home: NextPage = (urlAPI: any) => {
-  console.log("url", urlAPI.urlAPI);
+const Home: NextPage = ({ result }: any) => {
+  console.log("esse é result", result);
+  const universityImage =
+    "http://www.ppghi.uneb.br/wp-content/uploads/2019/03/logo_uneb.svg";
+  const universityName = "Universidade do Estado da Bahia";
+
   const [selectedFilterCourse, setSelectedFilterCourse] = useState("");
   const [selectedFilterSemester, setSelectedFilterSemester] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalStudent, setModalStudent] = useState({});
 
   function parseSelected(event: any) {
     const valueToParse = event.target.value;
@@ -50,13 +62,23 @@ const Home: NextPage = (urlAPI: any) => {
       setSelectedFilterSemester(itemSelected.numberSemester);
     return;
   }
+  const openModal = (student: any) => {
+    setShowModal((prev) => !prev);
+    setModalStudent(student);
+  };
 
   return (
     <C.Container>
       <Head>
         <title>Carteirinha Estudantil | UNEB</title>
       </Head>
-
+      <Modal
+        student={modalStudent}
+        universityImage={universityImage}
+        universityName={universityName}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
       <C.Filter>
         <p style={{ color: "#fff" }}>Filtragem por curso</p>
         <select name="any" id="any" onChange={parseSelected}>
@@ -76,15 +98,61 @@ const Home: NextPage = (urlAPI: any) => {
           ))}
         </select>
       </C.Filter>
-      <C.ListID>{Profile(urlAPI)}</C.ListID>
+      <C.ListID>
+        {result?.map((result: any) => (
+          <div
+            key={result?.idStudent}
+            onClick={() => openModal(result)}
+            className="id"
+          >
+            <div className="image">
+              <img
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: "1rem",
+                  border: "0.2rem solid #009774",
+                }}
+                alt={result?.name}
+                src={result?.photo}
+              />
+            </div>
+            <div className="data">
+              <p>{result?.name.toUpperCase()}</p>
+              <p>{result?.course}</p>
+              <p>{result?.status ? "Inativo" : "Ativo"}</p>
+              <p>{result?.semester}</p>
+              <p>{result?.codeStudent}</p>
+            </div>
+            <div className="university">
+              <img style={{ width: "5rem" }} src={universityImage} />
+              <p
+                style={{
+                  alignItems: "center",
+                  fontSize: "10px",
+                  display: "flex",
+                  margin: "0 auto",
+                }}
+              >
+                {universityName}
+              </p>
+            </div>
+          </div>
+        ))}
+      </C.ListID>
     </C.Container>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const urlAPI = `${process.env.URL}/list`;
+export const getStaticProps: GetStaticProps = async (context) => {
+  const res = await fetch("https://id-student-uneb.herokuapp.com/list");
+  const result: any = await res.json();
   return {
-    props: { urlAPI },
+    props: {
+      result,
+    },
+    revalidate: 10,
   };
 };
+
 export default Home;

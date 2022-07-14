@@ -75,21 +75,27 @@ const Register: NextPage = (urlAPI: any) => {
   };
 
   const onRegister: SubmitHandler<NextForm> = async (data) => {
-    reset(data);
+    setLoading(true);
     data.codeStudent = uuidv4();
     data.dateRegister = moment();
     data.dateRevalidate = moment().add(170, "days");
-
-    const res = await fetch(`${process.env.URL}`, {
-      body: JSON.stringify({
-        ...data,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
+    console.log("data: ", data);
+    /*axios.post(`${urlAPI.urlAPI}/registry`, data).then((response) => {
+      const result = response;
+      if (result.status === 200) {
+        setLoading(false);
+        openAlert("Carteirinha registrada com sucesso!");
+      } else if (result.status === 500) {
+        setLoading(false);
+        openAlert("Erro nos dados informados");
+      } else if (result.status === 404 || result.status === 400) {
+        setLoading(false);
+        openAlert("Erro no servidor Sagres!");
+      } else if (result.status === 503) {
+        openAlert("Sagres UNEB indisponível.");
+      }
     });
-    const result = await res.json();
+    reset(data);*/
   };
   if (loading) {
     return (
