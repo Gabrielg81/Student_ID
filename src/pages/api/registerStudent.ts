@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { StudentCheckModel } from "../../db/models/StudentCheckModel";
 import * as bcrypt from "bcrypt";
 import { db } from "../../db/config";
-
+/* 
 const registerStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST": {
@@ -59,6 +59,7 @@ async function getRegistryID(req: NextApiRequest, res: NextApiResponse) {
       .status(204)
       .json({ success: false, mensagem: "Não há estudantes cadastrados!" });
   }
-}
+} */
 
+const registerStudent = () => {};
 export default registerStudent;

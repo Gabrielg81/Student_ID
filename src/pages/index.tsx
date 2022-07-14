@@ -37,6 +37,7 @@ const semester = [
 
 // const Home: NextPage = () => {
 const Home: NextPage = (urlAPI: any) => {
+  console.log("url", urlAPI.urlAPI);
   const [selectedFilterCourse, setSelectedFilterCourse] = useState("");
   const [selectedFilterSemester, setSelectedFilterSemester] = useState("");
 
@@ -80,8 +81,8 @@ const Home: NextPage = (urlAPI: any) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const urlAPI = `${process.env.URL}`;
+export const getServerSideProps: GetServerSideProps = async () => {
+  const urlAPI = `${process.env.URL}/list`;
   return {
     props: { urlAPI },
   };

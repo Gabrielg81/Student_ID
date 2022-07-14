@@ -6,13 +6,11 @@ import Modal from "../components/Modal";
 const fetcher = (url: any) => fetch(url).then((res) => res.json());
 
 export default function Profile(urlAPI: any) {
+  console.log("url list: ", urlAPI);
   const universityImage =
     "http://www.ppghi.uneb.br/wp-content/uploads/2019/03/logo_uneb.svg";
   const universityName = "Universidade do Estado da Bahia";
-  const { data, error } = useSWR(
-    `${urlAPI.urlAPI}/api/registerStudent`,
-    fetcher
-  );
+  const { data, error } = useSWR(`${urlAPI.urlAPI}`, fetcher);
   const openModal = (student: any) => {
     setShowModal((prev) => !prev);
     setModalStudent(student);

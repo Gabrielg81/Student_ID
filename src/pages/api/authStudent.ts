@@ -1,8 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import puppeteer from "puppeteer";
 
-const authStudent = async (req: NextApiRequest, res: NextApiResponse) => {
+/* const authStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST": {
       return checkInfoStudents(req, res);
@@ -83,5 +84,6 @@ async function getStudentsID(req: NextApiRequest, res: NextApiResponse) {
     .status(200)
     .json({ result: "Carteirinhas cadastradas no banco de dados" });
 }
-
+ */
+const authStudent = () => {};
 export default authStudent;

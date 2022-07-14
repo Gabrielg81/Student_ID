@@ -2,6 +2,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import moment from "moment";
 import "moment/locale/pt-br";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 import Head from "next/head";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -50,35 +51,27 @@ const Register: NextPage = (urlAPI: any) => {
   };
 
   const registration: SubmitHandler<Form> = async (data) => {
+    console.log("url:", urlAPI.urlAPI, "data: ", data);
     //Chamada a API para checar se a matricula está ok
     setLoading(true);
 
-    const res = await fetch(`${urlAPI.urlAPI}/api/authStudent`, {
-      body: JSON.stringify({
-        matriculation: data.matriculation,
-        password: data.password,
-      }),
-      headers: {
-        "Content-Type": "application/json, text/plain, */*",
-        "Access-Control-Allow-Origin": "*",
-        "User-Agent": "*",
-      },
-      method: "POST",
+    axios.post(`${urlAPI.urlAPI}/check`, data).then((response) => {
+      const result = response;
+      if (result.data.name != undefined) {
+        setLoading(false);
+        setOk(true);
+        setName(result.data.name);
+        reset(result);
+      } else if (result.status === 500) {
+        setLoading(false);
+        openAlert("Erro nos dados informados");
+      } else if (result.status === 404 || result.status === 400) {
+        setLoading(false);
+        openAlert("Erro no servidor Sagres!");
+      } else if (result.status === 503) {
+        openAlert("Sagres UNEB indisponível.");
+      }
     });
-
-    const result = await res.json();
-    if (result.name != undefined) {
-      setLoading(false);
-      setOk(true);
-      setName(result.name);
-      reset(result);
-    } else if (res.status === 500) {
-      setLoading(false);
-      openAlert("Erro nos dados informados");
-    } else if (res.status === 404 || res.status === 400) {
-      setLoading(false);
-      openAlert("Erro no servidor!");
-    }
   };
 
   const onRegister: SubmitHandler<NextForm> = async (data) => {
