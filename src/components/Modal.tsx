@@ -36,11 +36,19 @@ export default function Modal(props: any) {
               <p>{student?.semester}</p>
               <p>{student?.codeStudent}</p>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <a href={student?.linkedin} target={"_blank"}>
-                  <Image src="/linkedin.png" width={30} height={30} />
+                <a
+                  href={student?.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image src={"/linkedin.png"} width={30} height={30} />
                 </a>
-                <a href={student?.lattes} target={"_blank"}>
-                  <Image src="/lattes.png" width={30} height={30} />
+                <a
+                  href={student?.lattes}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image src={"/lattes.png"} width={30} height={30} />
                 </a>
               </div>
             </div>
