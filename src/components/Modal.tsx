@@ -6,7 +6,6 @@ import { Background, CardModal } from "../styles/components.Styles";
 import Image from "next/image";
 
 export default function Modal(props: any) {
-  console.log("bateu", props);
   const { student, universityImage, universityName, showModal, setShowModal } =
     props;
   return (
@@ -30,10 +29,10 @@ export default function Modal(props: any) {
               />
             </div>
             <div className="data">
-              <p>{student?.name}</p>
+              <p>{student?.name.toUpperCase()}</p>
               <p>{student?.course}</p>
               <p>{student?.status ? "Inativo" : "Ativo"}</p>
-              <p>{student?.semester}</p>
+              <p>{student?.semester} semestre</p>
               <p>{student?.codeStudent}</p>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 <a

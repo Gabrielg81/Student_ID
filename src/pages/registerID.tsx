@@ -3,6 +3,7 @@ import moment from "moment";
 import "moment/locale/pt-br";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 import Head from "next/head";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -28,7 +29,7 @@ interface NextForm {
   sex: string;
   birthDate: string;
   photo: string;
-  curriculum: string;
+  lattes: string;
   linkedin: string;
   password: string;
   dateRegister: moment.Moment;
@@ -36,7 +37,7 @@ interface NextForm {
 }
 
 moment.locale("pt-br");
-
+let nameCheck: string;
 const Register: NextPage = (urlAPI: any) => {
   const { register, handleSubmit, reset } = useForm();
   const [name, setName] = useState(String);
@@ -44,58 +45,68 @@ const Register: NextPage = (urlAPI: any) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState(String);
   const [loading, setLoading] = useState(false);
-
+  const router = useRouter();
   const openAlert = (Message: string) => {
     setShowAlert((prev) => !prev);
     setAlertMessage(Message);
   };
 
   const registration: SubmitHandler<Form> = async (data) => {
-    console.log("url:", urlAPI.urlAPI, "data: ", data);
     //Chamada a API para checar se a matricula está ok
     setLoading(true);
 
-    axios.post(`${urlAPI.urlAPI}/check`, data).then((response) => {
-      const result = response;
-      if (result.data.name != undefined) {
+    axios
+      .post(`${urlAPI.urlAPI}/check`, data)
+      .then((response) => {
+        const result = response;
+        nameCheck = result.data.name;
+        if (result.data.name != undefined) {
+          setLoading(false);
+          setOk(true);
+          setName(result.data.name);
+          reset(result);
+        }
+      })
+      .catch((err) => {
         setLoading(false);
-        setOk(true);
-        setName(result.data.name);
-        reset(result);
-      } else if (result.status === 500) {
-        setLoading(false);
-        openAlert("Erro nos dados informados");
-      } else if (result.status === 404 || result.status === 400) {
-        setLoading(false);
-        openAlert("Erro no servidor Sagres!");
-      } else if (result.status === 503) {
-        openAlert("Sagres UNEB indisponível.");
-      }
-    });
+        openAlert("Erro nos dados informados!");
+      });
   };
 
   const onRegister: SubmitHandler<NextForm> = async (data) => {
     setLoading(true);
-    data.codeStudent = uuidv4();
+    data.codeStudent = Math.random().toString(36).substring(4);
     data.dateRegister = moment();
     data.dateRevalidate = moment().add(170, "days");
-    console.log("data: ", data);
-    /*axios.post(`${urlAPI.urlAPI}/registry`, data).then((response) => {
-      const result = response;
-      if (result.status === 200) {
+    data.name = nameCheck;
+    axios
+      .post(`${urlAPI.urlAPI}/registry`, data)
+      .then((response) => {
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
+        if (response.status == 200) {
+          alert("Carteirinha registrada com sucesso!");
+          setLoading(false);
+        } else if (response.status == 500) {
+          setLoading(false);
+          openAlert("Erro nos dados informados");
+        } else if (response.status == 404 || response.status === 400) {
+          setLoading(false);
+          openAlert("Erro no servidor Sagres!");
+        } else if (response.status == 503) {
+          openAlert("Sagres UNEB indisponível.");
+          setLoading(false);
+        } else if (response.status == 501) {
+          openAlert("Usuário já cadastrado.");
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        openAlert("Erro nos dados informados.");
         setLoading(false);
-        openAlert("Carteirinha registrada com sucesso!");
-      } else if (result.status === 500) {
-        setLoading(false);
-        openAlert("Erro nos dados informados");
-      } else if (result.status === 404 || result.status === 400) {
-        setLoading(false);
-        openAlert("Erro no servidor Sagres!");
-      } else if (result.status === 503) {
-        openAlert("Sagres UNEB indisponível.");
-      }
-    });
-    reset(data);*/
+      });
+    reset();
   };
   if (loading) {
     return (
@@ -186,10 +197,10 @@ const Register: NextPage = (urlAPI: any) => {
           <div>
             <p>&nbsp;&nbsp;&nbsp;C.LATTES:</p>
             <C.Input
-              {...register("curriculum")}
+              {...register("lattes")}
               type="text"
-              id="curriculum"
-              name="curriculum"
+              id="lattes"
+              name="lattes"
               resource="14px 90px"
             />
           </div>
@@ -226,11 +237,6 @@ const Register: NextPage = (urlAPI: any) => {
               resource="14px 90px"
             />
           </div>
-
-          <C.Button type="submit" color="primary">
-            CADASTRAR
-          </C.Button>
-
           <C.Button
             color="secondary"
             type="button"
@@ -240,6 +246,9 @@ const Register: NextPage = (urlAPI: any) => {
             }}
           >
             CANCELAR
+          </C.Button>
+          <C.Button type="submit" color="primary">
+            CADASTRAR
           </C.Button>
         </C.GridFormRegister>
       </C.Container>

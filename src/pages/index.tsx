@@ -43,7 +43,6 @@ const semester = [
 
 // const Home: NextPage = () => {
 const Home: NextPage = ({ result }: any) => {
-  console.log("esse é result", result);
   const universityImage =
     "http://www.ppghi.uneb.br/wp-content/uploads/2019/03/logo_uneb.svg";
   const universityName = "Universidade do Estado da Bahia";
@@ -118,11 +117,10 @@ const Home: NextPage = ({ result }: any) => {
               />
             </div>
             <div className="data">
-              <p>{result?.name.toUpperCase()}</p>
+              <p>{result?.name?.toUpperCase()}</p>
               <p>{result?.course}</p>
               <p>{result?.status ? "Inativo" : "Ativo"}</p>
-              <p>{result?.semester}</p>
-              <p>{result?.codeStudent}</p>
+              <p>{result?.semester} semestre</p>
             </div>
             <div className="university">
               <img style={{ width: "5rem" }} src={universityImage} />
@@ -146,7 +144,8 @@ const Home: NextPage = ({ result }: any) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const res = await fetch("https://id-student-uneb.herokuapp.com/list");
-  const result: any = await res.json();
+
+  const result: any = await res?.json();
   return {
     props: {
       result,
