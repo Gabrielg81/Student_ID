@@ -29,7 +29,7 @@ export default function Modal(props: any) {
               />
             </div>
             <div className="data">
-              <p>{student?.name.toUpperCase()}</p>
+              <p>{student?.name?.toUpperCase()}</p>
               <p>{student?.course}</p>
               <p>{student?.status ? "Inativo" : "Ativo"}</p>
               <p>{student?.semester} semestre</p>
