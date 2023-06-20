@@ -25,7 +25,7 @@ type HomeProps = {
 };
 
 const Home: NextPage<HomeProps> = ({ courses, semesters }) => {
-  const { data, error } = useSWR('http://localhost:8080/students-all', fetcher);
+  const { data, error } = useSWR(`${URL}/students-all`, fetcher);
 
   const universityImage =
     'http://www.ppghi.uneb.br/wp-content/uploads/2019/03/logo_uneb.svg';
@@ -131,7 +131,7 @@ const Home: NextPage<HomeProps> = ({ courses, semesters }) => {
 };
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const coursesResponse = await fetch('http://localhost:8080/course-all');
+  const coursesResponse = await fetch(`${URL}/course-all`);
   const coursesData = await coursesResponse.json();
 
   const courses: Course[] = coursesData.map((data: Course) => ({
@@ -139,7 +139,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
     course: data.value,
   }));
 
-  const semestersResponse = await fetch('http://localhost:8080/semester-all');
+  const semestersResponse = await fetch(`${URL}/semester-all`);
   const semestersData = await semestersResponse.json();
 
   const semesters: Semester[] = semestersData.map((data: Semester) => ({
