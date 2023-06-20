@@ -11,11 +11,11 @@ import SelectFilter from '../utils/SelectFilter';
 import * as C from '../styles/pages.Styles';
 
 type Course = {
-  id: number;
+  id: string;
   value: string;
 };
 type Semester = {
-  id: number;
+  id: string;
   value: string;
 };
 
