@@ -1,56 +1,40 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable jsx-a11y/alt-text */
+import { error } from 'console';
+import type { GetStaticProps, NextPage } from 'next';
+import Head from 'next/head';
+import React, { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import Modal from '../components/Modal';
+import { fetcher } from '../lib/fetcher';
 
-import { AnyAaaaRecord } from "dns";
-import type {
-  NextPage,
-  GetServerSideProps,
-  GetStaticProps,
-  GetStaticPropsContext,
-} from "next";
-import Head from "next/head";
-import { useState } from "react";
-import Modal from "../components/Modal";
+import SelectFilter from '../utils/SelectFilter';
 
-import * as C from "../styles/pages.Styles";
+import * as C from '../styles/pages.Styles';
 
-type Data = {
-  result: string;
+type Course = {
+  id: number;
+  value: string;
+};
+type Semester = {
+  id: number;
+  value: string;
 };
 
-const courses = [
-  { nameCourse: "Todos", key: 0 },
-  { nameCourse: "Sistemas de Informação", key: 2 },
-  { nameCourse: "Engenharia Sanitária Ambiental", key: 3 },
-  { nameCourse: "Matemática", key: 4 },
-];
+type HomeProps = {
+  courses: Course[];
+  semesters: Semester[];
+};
 
-const semester = [
-  { numberSemester: "Todos", key: 0 },
-  { numberSemester: "1", key: 1 },
-  { numberSemester: "2", key: 2 },
-  { numberSemester: "3", key: 3 },
-  { numberSemester: "4", key: 4 },
-  { numberSemester: "5", key: 5 },
-  { numberSemester: "6", key: 6 },
-  { numberSemester: "7", key: 7 },
-  { numberSemester: "8", key: 8 },
-  { numberSemester: "9", key: 9 },
-  { numberSemester: "10", key: 10 },
-  { numberSemester: "11", key: 11 },
-  { numberSemester: "12", key: 12 },
-];
+const Home: NextPage<HomeProps> = ({ courses, semesters }) => {
+  const { data, error } = useSWR('http://localhost:8080/students-all', fetcher);
 
-// const Home: NextPage = () => {
-const Home: NextPage = ({ result }: any) => {
   const universityImage =
-    "http://www.ppghi.uneb.br/wp-content/uploads/2019/03/logo_uneb.svg";
-  const universityName = "Universidade do Estado da Bahia";
+    'http://www.ppghi.uneb.br/wp-content/uploads/2019/03/logo_uneb.svg';
+  const universityName = 'Universidade do Estado da Bahia';
 
-  const [selectedFilterCourse, setSelectedFilterCourse] = useState("");
-  const [selectedFilterSemester, setSelectedFilterSemester] = useState("");
+  const [selectedFilterCourse, setSelectedFilterCourse] = useState();
+  const [selectedFilterSemester, setSelectedFilterSemester] = useState();
   const [showModal, setShowModal] = useState(false);
-  const [modalStudent, setModalStudent] = useState({});
+  const [modalStudent, setModalStudent] = useState();
 
   function parseSelected(event: any) {
     const valueToParse = event.target.value;
@@ -61,10 +45,10 @@ const Home: NextPage = ({ result }: any) => {
       setSelectedFilterSemester(itemSelected.numberSemester);
     return;
   }
-  const openModal = (student: any) => {
+  function openModal(student: any) {
     setShowModal((prev) => !prev);
     setModalStudent(student);
-  };
+  }
 
   return (
     <C.Container>
@@ -78,79 +62,96 @@ const Home: NextPage = ({ result }: any) => {
         showModal={showModal}
         setShowModal={setShowModal}
       />
-      <C.Filter>
-        <p style={{ color: "#fff" }}>Filtragem por curso</p>
-        <select name="any" id="any" onChange={parseSelected}>
-          {courses.map((course) => (
-            <option key={course.key} value={JSON.stringify(course)}>
-              {course.nameCourse}
-            </option>
-          ))}
-        </select>
 
-        <p style={{ color: "#fff" }}>Filtragem por semestre</p>
-        <select name="any" id="any" onChange={parseSelected}>
-          {semester.map((semester) => (
-            <option key={semester.key} value={JSON.stringify(semester)}>
-              {semester.numberSemester}
-            </option>
-          ))}
-        </select>
+      <C.Filter>
+        <SelectFilter
+          label='Filtragem por curso'
+          name='course'
+          options={courses}
+          parseSelected={parseSelected}
+        />
+
+        <SelectFilter
+          label='Filtragem por semestre'
+          name='semester'
+          options={semesters}
+          parseSelected={parseSelected}
+        />
       </C.Filter>
+
       <C.ListID>
-        {result?.map((result: any) => (
-          <div
-            key={result?.idStudent}
-            onClick={() => openModal(result)}
-            className="id"
-          >
-            <div className="image">
-              <img
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  borderRadius: "1rem",
-                  border: "0.2rem solid #009774",
-                }}
-                alt={result?.name}
-                src={result?.photo}
-              />
+        {!data && !error && <h1>Carregando carteirinhas...</h1>}
+        {!data && error && <h2>Erro ao consultar, tente mais tarde!</h2>}
+        {data?.map(
+          (
+            result: any //TODO inserir tipagem
+          ) => (
+            <div
+              key={result?.students.id}
+              onClick={() => openModal(result.students)}
+              className='id'
+            >
+              <div className='image'>
+                <img
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '1rem',
+                    border: '0.2rem solid #009774',
+                  }}
+                  alt={result?.students.name}
+                  src={result?.students.photo}
+                />
+              </div>
+              <div className='data'>
+                <p>{result?.students.name?.toUpperCase()}</p>
+                <p>{result?.students.course}</p>
+                <p>{result?.students.status ? 'Inativo' : 'Ativo'}</p>
+                <p>{result?.students.semester} semestre</p>
+              </div>
+              <div className='university'>
+                <img style={{ width: '5rem' }} src={universityImage} />
+                <p
+                  style={{
+                    alignItems: 'center',
+                    fontSize: '10px',
+                    display: 'flex',
+                    margin: '0 auto',
+                  }}
+                >
+                  {universityName}
+                </p>
+              </div>
             </div>
-            <div className="data">
-              <p>{result?.name?.toUpperCase()}</p>
-              <p>{result?.course}</p>
-              <p>{result?.status ? "Inativo" : "Ativo"}</p>
-              <p>{result?.semester} semestre</p>
-            </div>
-            <div className="university">
-              <img style={{ width: "5rem" }} src={universityImage} />
-              <p
-                style={{
-                  alignItems: "center",
-                  fontSize: "10px",
-                  display: "flex",
-                  margin: "0 auto",
-                }}
-              >
-                {universityName}
-              </p>
-            </div>
-          </div>
-        ))}
+          )
+        )}
       </C.ListID>
     </C.Container>
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const res = await fetch("https://id-student-uneb.herokuapp.com/list");
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const coursesResponse = await fetch('http://localhost:8080/course-all');
+  const coursesData = await coursesResponse.json();
 
-  const result: any = await res?.json();
+  const courses: Course[] = coursesData.map((data: Course) => ({
+    id: data.id,
+    course: data.value,
+  }));
+
+  const semestersResponse = await fetch('http://localhost:8080/semester-all');
+  const semestersData = await semestersResponse.json();
+
+  const semesters: Semester[] = semestersData.map((data: Semester) => ({
+    id: data.id,
+    semester: data.value,
+  }));
+
   return {
     props: {
-      result,
+      courses,
+      semesters,
     },
-    revalidate: 10,
   };
 };
 

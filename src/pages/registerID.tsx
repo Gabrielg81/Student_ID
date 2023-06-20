@@ -1,17 +1,17 @@
-import type { GetServerSideProps, NextPage } from "next";
-import moment from "moment";
-import "moment/locale/pt-br";
-import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
-import { useRouter } from "next/router";
+import type { GetServerSideProps, NextPage } from 'next';
+import moment from 'moment';
+import 'moment/locale/pt-br';
+import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
-import Head from "next/head";
-import { useForm, SubmitHandler } from "react-hook-form";
+import Head from 'next/head';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
-import * as C from "../styles/pages.Styles";
-import { useState } from "react";
-import Alert from "../components/Alert";
-import LoadingScreen from "../components/LoadingScreen";
+import * as C from '../styles/pages.Styles';
+import { useState } from 'react';
+import Alert from '../components/Alert';
+import LoadingScreen from '../components/LoadingScreen';
 
 interface Form {
   matriculation: string;
@@ -36,7 +36,7 @@ interface NextForm {
   dateRevalidate: moment.Moment;
 }
 
-moment.locale("pt-br");
+moment.locale('pt-br');
 let nameCheck: string;
 const Register: NextPage = (urlAPI: any) => {
   const { register, handleSubmit, reset } = useForm();
@@ -56,7 +56,7 @@ const Register: NextPage = (urlAPI: any) => {
     setLoading(true);
 
     axios
-      .post(`${urlAPI.urlAPI}/check`, data)
+      .post(`${urlAPI.urlAPI}/api/authStudent`, data)
       .then((response) => {
         const result = response;
         nameCheck = result.data.name;
@@ -69,7 +69,7 @@ const Register: NextPage = (urlAPI: any) => {
       })
       .catch((err) => {
         setLoading(false);
-        openAlert("Erro nos dados informados!");
+        openAlert('Erro nos dados informados!');
       });
   };
 
@@ -77,33 +77,33 @@ const Register: NextPage = (urlAPI: any) => {
     setLoading(true);
     data.codeStudent = Math.random().toString(36).substring(4);
     data.dateRegister = moment();
-    data.dateRevalidate = moment().add(170, "days");
+    data.dateRevalidate = moment().add(170, 'days');
     data.name = nameCheck;
     axios
       .post(`${urlAPI.urlAPI}/registry`, data)
       .then((response) => {
         setTimeout(() => {
-          router.push("/");
+          router.push('/');
         }, 2000);
         if (response.status == 200) {
-          alert("Carteirinha registrada com sucesso!");
+          alert('Carteirinha registrada com sucesso!');
           setLoading(false);
         } else if (response.status == 500) {
           setLoading(false);
-          openAlert("Erro nos dados informados");
+          openAlert('Erro nos dados informados');
         } else if (response.status == 404 || response.status === 400) {
           setLoading(false);
-          openAlert("Erro no servidor Sagres!");
+          openAlert('Erro no servidor Sagres!');
         } else if (response.status == 503) {
-          openAlert("Sagres UNEB indisponível.");
+          openAlert('Sagres UNEB indisponível.');
           setLoading(false);
         } else if (response.status == 501) {
-          openAlert("Usuário já cadastrado.");
+          openAlert('Usuário já cadastrado.');
           setLoading(false);
         }
       })
       .catch((err) => {
-        openAlert("Erro nos dados informados.");
+        openAlert('Erro nos dados informados.');
         setLoading(false);
       });
     reset();
@@ -133,96 +133,96 @@ const Register: NextPage = (urlAPI: any) => {
             <p>&nbsp;&nbsp;&nbsp;CURSO:</p>
             <C.Input
               required
-              {...register("course")}
-              type="text"
-              id="course"
-              name="course"
-              resource="14px 90px"
+              {...register('course')}
+              type='text'
+              id='course'
+              name='course'
+              resource='14px 90px'
             />
           </div>
           <div>
             <p>&nbsp;&nbsp;&nbsp;SEMESTRE:</p>
             <C.Input
               required
-              {...register("semester")}
-              type="text"
-              id="semester"
-              name="semester"
-              resource="14px 90px"
+              {...register('semester')}
+              type='text'
+              id='semester'
+              name='semester'
+              resource='14px 90px'
             />
           </div>
           <div>
             <p>&nbsp;&nbsp;&nbsp;CPF:</p>
             <C.Input
               required
-              {...register("cpf")}
-              type="text"
-              id="cpf"
-              name="cpf"
-              resource="14px 90px"
+              {...register('cpf')}
+              type='text'
+              id='cpf'
+              name='cpf'
+              resource='14px 90px'
             />
           </div>
           <div>
             <p>&nbsp;&nbsp;&nbsp;RG:</p>
             <C.Input
               required
-              {...register("rg")}
-              type="text"
-              id="rg"
-              name="rg"
-              resource="14px 90px"
+              {...register('rg')}
+              type='text'
+              id='rg'
+              name='rg'
+              resource='14px 90px'
             />
           </div>
           <div>
             <p>&nbsp;&nbsp;&nbsp;DATA DE NASCIMENTO:</p>
             <C.Input
               required
-              {...register("birthDate")}
-              type="text"
-              id="birthDate"
-              name="birthDate"
-              resource="14px 90px"
+              {...register('birthDate')}
+              type='text'
+              id='birthDate'
+              name='birthDate'
+              resource='14px 90px'
             />
           </div>
           <div>
             <p>&nbsp;&nbsp;&nbsp;SEXO:</p>
             <C.Input
-              {...register("sex")}
-              type="text"
-              id="sex"
-              name="sex"
-              resource="14px 90px"
+              {...register('sex')}
+              type='text'
+              id='sex'
+              name='sex'
+              resource='14px 90px'
             />
           </div>
           <div>
             <p>&nbsp;&nbsp;&nbsp;C.LATTES:</p>
             <C.Input
-              {...register("lattes")}
-              type="text"
-              id="lattes"
-              name="lattes"
-              resource="14px 90px"
+              {...register('lattes')}
+              type='text'
+              id='lattes'
+              name='lattes'
+              resource='14px 90px'
             />
           </div>
           <div>
             <p>&nbsp;&nbsp;&nbsp;LINKEDIN:</p>
             <C.Input
-              {...register("linkedin")}
-              type="text"
-              id="linkedin"
-              name="linkedin"
-              resource="14px 90px"
+              {...register('linkedin')}
+              type='text'
+              id='linkedin'
+              name='linkedin'
+              resource='14px 90px'
             />
           </div>
           <div>
             <p>&nbsp;&nbsp;&nbsp;FOTO:</p>
             <C.Input
-              {...register("photo")}
-              type="text"
-              id="photo"
-              name="photo"
-              resource="14px 90px"
-              placeholder="Insira o link da foto"
+              {...register('photo')}
+              type='text'
+              id='photo'
+              name='photo'
+              resource='14px 90px'
+              placeholder='Insira o link da foto'
             />
           </div>
 
@@ -230,24 +230,24 @@ const Register: NextPage = (urlAPI: any) => {
             <p>&nbsp;&nbsp;&nbsp;SENHA:</p>
             <C.Input
               required
-              {...register("password")}
-              type="password"
-              id="password"
-              name="password"
-              resource="14px 90px"
+              {...register('password')}
+              type='password'
+              id='password'
+              name='password'
+              resource='14px 90px'
             />
           </div>
           <C.Button
-            color="secondary"
-            type="button"
+            color='secondary'
+            type='button'
             onClick={() => {
               setOk(false);
-              setName("");
+              setName('');
             }}
           >
             CANCELAR
           </C.Button>
-          <C.Button type="submit" color="primary">
+          <C.Button type='submit' color='primary'>
             CADASTRAR
           </C.Button>
         </C.GridFormRegister>
@@ -259,7 +259,7 @@ const Register: NextPage = (urlAPI: any) => {
       <Alert
         showAlert={showAlert}
         text={alertMessage}
-        type="error"
+        type='error'
         setShowAlert={setShowAlert}
       />
       <Head>
@@ -273,28 +273,28 @@ const Register: NextPage = (urlAPI: any) => {
       </C.TextCard>
 
       <C.FormRegister onSubmit={handleSubmit(registration)}>
-        <h2 className="txt">INSIRA OS DADOS DE ACESSO AO SAGRES</h2>
+        <h2 className='txt'>INSIRA OS DADOS DE ACESSO AO SAGRES</h2>
         <div>
           <p>&nbsp;&nbsp;&nbsp;MATRÍCULA:</p>
           <C.Input
-            {...register("matriculation")}
-            placeholder="Sua Matrícula"
-            type="text"
-            name="matriculation"
+            {...register('matriculation')}
+            placeholder='Sua Matrícula'
+            type='text'
+            name='matriculation'
             required
           />
         </div>
         <div>
           <p>&nbsp;&nbsp;&nbsp;SENHA:</p>
           <C.Input
-            {...register("password")}
-            placeholder="Os 6 primeiros dígitos do CPF"
-            type="password"
-            name="password"
+            {...register('password')}
+            placeholder='Os 6 primeiros dígitos do CPF'
+            type='password'
+            name='password'
             required
           />
         </div>
-        <C.Button color="primary" type="submit">
+        <C.Button color='primary' type='submit'>
           VALIDAR
         </C.Button>
       </C.FormRegister>
@@ -302,7 +302,7 @@ const Register: NextPage = (urlAPI: any) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const urlAPI = `${process.env.URL}`;
+  const urlAPI = `${process.env.LOCALURL}`;
   return {
     props: { urlAPI },
   };

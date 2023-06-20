@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import styled from 'styled-components';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 export const Container = styled.div`
   width: 80vw;
   max-width: 85rem;
@@ -52,8 +52,8 @@ export const ListID = styled.div`
 
     display: grid;
     grid-template-areas:
-      "image image data data data data"
-      "university university university university university university";
+      'image image data data data data'
+      'university university university university university university';
     grid-gap: 1rem;
   }
 
@@ -83,9 +83,9 @@ export const Button = styled.button`
   cursor: pointer;
   margin: 0;
   background-color: ${(props) =>
-    props.color === "primary"
+    props.color === 'primary'
       ? props.theme.colors.primary
-      : props.color === "secondary"
+      : props.color === 'secondary'
       ? props.theme.colors.secondary
       : props.theme.colors.inherit};
 
@@ -100,15 +100,15 @@ export const Button = styled.button`
   :active,
   :focus {
     background-color: ${(props) =>
-      props.color === "primary"
+      props.color === 'primary'
         ? props.theme.colors.indicator
-        : props.color === "secondary"
-        ? "#733E3E"
-        : "#676767"};
+        : props.color === 'secondary'
+        ? '#733E3E'
+        : '#676767'};
     transition-duration: 0.7s;
   }
   text-decoration: none;
-  font-size: ${(props) => (props.resource ? props.resource : "20px")};
+  font-size: ${(props) => (props.resource ? props.resource : '20px')};
 `;
 export const FormRegister = styled.form`
   display: grid;
@@ -132,7 +132,7 @@ export const Input = styled.input`
   border-style: solid;
   width: 100%;
   border-radius: 1.5rem;
-  padding: ${(props) => (props.resource ? props.resource : "14px 40px")};
+  padding: ${(props) => (props.resource ? props.resource : '14px 40px')};
   outline: none;
   transition: 0.5s;
   :focus {
@@ -145,11 +145,9 @@ export const TextCard = styled.div`
   background: ${(props) => props.theme.colors.inherit};
   margin-bottom: 10px;
   border-radius: 1.5rem;
-  padding: ${(props) => (props.resource ? props.resource : "1.3rem")};
+  padding: ${(props) => (props.resource ? props.resource : '1.3rem')};
   p {
     color: ${(props) => props.theme.colors.text.primary};
     text-align: justify;
   }
 `;
-
-
