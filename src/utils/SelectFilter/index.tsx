@@ -15,9 +15,11 @@ const SelectFilter: React.FC<SelectFilterProps> = ({
   <C.Box>
     <p style={{ color: '#fff' }}>{label}</p>
     <select name={name} id={name} onChange={parseSelected}>
-      <option value=''>Selecione uma opção</option>
+      <option value={''}>Selecione uma opção</option>
       {options?.map((option) => (
         <option key={option.id} value={option.id}>
+          {console.log(option)}
+
           {option.value}
         </option>
       ))}

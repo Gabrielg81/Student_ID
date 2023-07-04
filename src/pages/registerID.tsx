@@ -1,4 +1,8 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  NextPage,
+} from 'next';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import { v4 as uuidv4 } from 'uuid';
@@ -38,7 +42,8 @@ interface NextForm {
 
 moment.locale('pt-br');
 let nameCheck: string;
-const Register: NextPage = (urlAPI: any) => {
+
+const Register: NextPage<{ urlAPI: string }> = ({ urlAPI }) => {
   const { register, handleSubmit, reset } = useForm();
   const [name, setName] = useState(String);
   const [ok, setOk] = useState(false);
@@ -56,9 +61,12 @@ const Register: NextPage = (urlAPI: any) => {
     setLoading(true);
 
     axios
-      .post(`${urlAPI.urlAPI}/api/authStudent`, data)
+      .post(`${urlAPI}/verify-student`, data, {
+        withCredentials: false,
+      })
       .then((response) => {
         const result = response;
+        console.log(result);
         nameCheck = result.data.name;
         if (result.data.name != undefined) {
           setLoading(false);
@@ -80,7 +88,9 @@ const Register: NextPage = (urlAPI: any) => {
     data.dateRevalidate = moment().add(170, 'days');
     data.name = nameCheck;
     axios
-      .post(`${urlAPI.urlAPI}/registry`, data)
+      .post(`${urlAPI}/register`, data, {
+        withCredentials: false,
+      })
       .then((response) => {
         setTimeout(() => {
           router.push('/');
@@ -301,8 +311,10 @@ const Register: NextPage = (urlAPI: any) => {
     </C.Container>
   );
 };
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const urlAPI = `${process.env.LOCALURL}`;
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const urlAPI = process.env.URL;
   return {
     props: { urlAPI },
   };

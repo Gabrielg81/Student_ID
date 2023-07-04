@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
-import { MdClose } from "react-icons/md";
-import { Background, CardModal } from "../styles/components.Styles";
-import Image from "next/image";
+import React from 'react';
+import { MdClose } from 'react-icons/md';
+import { Background, CardModal } from '../styles/components.Styles';
+import Image from 'next/image';
 
 export default function Modal(props: any) {
-  const { student, universityImage, universityName, showModal, setShowModal } =
+  console.log(props);
+  const { data, universityImage, universityName, showModal, setShowModal } =
     props;
   return (
     <>
@@ -14,51 +15,51 @@ export default function Modal(props: any) {
         <Background>
           <CardModal>
             <MdClose
-              className="close"
+              className='close'
               onClick={() => setShowModal((prev: any) => !prev)}
             />
-            <div className="image">
+            <div className='image'>
               <img
                 style={{
-                  width: "100%",
-                  height: "auto",
-                  borderRadius: "1rem",
-                  border: "0.2rem solid #009774",
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: '1rem',
+                  border: '0.2rem solid #009774',
                 }}
-                src={student.photo}
+                src={data?.students?.photo}
               />
             </div>
-            <div className="data">
-              <p>{student?.name?.toUpperCase()}</p>
-              <p>{student?.course}</p>
-              <p>{student?.status ? "Inativo" : "Ativo"}</p>
-              <p>{student?.semester} semestre</p>
-              <p>{student?.codeStudent}</p>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <div className='data'>
+              <p>{data.students?.name?.toUpperCase()}</p>
+              <p>{data.course?.value}</p>
+              <p>{data.students?.status ? 'Inativo' : 'Ativo'}</p>
+              <p>{data.semester?.value}</p>
+              <p>{data.students?.codeStudent}</p>
+              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <a
-                  href={student?.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={data.students?.linkedin}
+                  target='_blank'
+                  rel='noopener noreferrer'
                 >
-                  <Image src={"/linkedin.png"} width={30} height={30} />
+                  <Image src={'/linkedin.png'} width={30} height={30} />
                 </a>
                 <a
-                  href={student?.lattes}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={data.students?.lattes}
+                  target='_blank'
+                  rel='noopener noreferrer'
                 >
-                  <Image src={"/lattes.png"} width={30} height={30} />
+                  <Image src={'/lattes.png'} width={30} height={30} />
                 </a>
               </div>
             </div>
-            <div className="university">
-              <img style={{ width: "5rem" }} src={universityImage} />
+            <div className='university'>
+              <img style={{ width: '5rem' }} src={universityImage} />
               <p
                 style={{
-                  alignItems: "center",
-                  fontSize: "10px",
-                  display: "flex",
-                  margin: "0 auto",
+                  alignItems: 'center',
+                  fontSize: '10px',
+                  display: 'flex',
+                  margin: '0 auto',
                 }}
               >
                 {universityName}

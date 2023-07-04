@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+/*import type { NextApiRequest, NextApiResponse } from 'next';
 import puppeteer from 'puppeteer';
 import cheerio from 'cheerio';
 import chrome from 'chrome-aws-lambda';
@@ -87,6 +87,7 @@ async function getStudentsID(req: NextApiRequest, res: NextApiResponse) {
   res
     .status(200)
     .json({ result: 'Carteirinhas cadastradas no banco de dados' });
-}
+}*/
 
+const authStudent = () => {};
 export default authStudent;
