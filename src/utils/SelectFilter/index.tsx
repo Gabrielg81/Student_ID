@@ -18,8 +18,6 @@ const SelectFilter: React.FC<SelectFilterProps> = ({
       <option value={''}>Selecione uma opção</option>
       {options?.map((option) => (
         <option key={option.id} value={option.id}>
-          {console.log(option)}
-
           {option.value}
         </option>
       ))}

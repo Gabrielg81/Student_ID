@@ -56,7 +56,7 @@ const Register: NextPage<{ urlAPI: string }> = ({ urlAPI }) => {
     setAlertMessage(Message);
   };
 
-  const registration: SubmitHandler<Form> = async (data) => {
+  const registration: SubmitHandler<any> = async (data) => {
     //Chamada a API para checar se a matricula está ok
     setLoading(true);
 
@@ -81,7 +81,7 @@ const Register: NextPage<{ urlAPI: string }> = ({ urlAPI }) => {
       });
   };
 
-  const onRegister: SubmitHandler<NextForm> = async (data) => {
+  const onRegister: SubmitHandler<any> = async (data) => {
     setLoading(true);
     data.codeStudent = Math.random().toString(36).substring(4);
     data.dateRegister = moment();

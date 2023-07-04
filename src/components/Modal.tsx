@@ -41,14 +41,24 @@ export default function Modal(props: any) {
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  <Image src={'/linkedin.png'} width={30} height={30} />
+                  <Image
+                    alt={'Studend ID - Image'}
+                    src={'/linkedin.png'}
+                    width={30}
+                    height={30}
+                  />
                 </a>
                 <a
                   href={data.students?.lattes}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  <Image src={'/lattes.png'} width={30} height={30} />
+                  <Image
+                    alt={'Studend ID - Image'}
+                    src={'/lattes.png'}
+                    width={30}
+                    height={30}
+                  />
                 </a>
               </div>
             </div>
