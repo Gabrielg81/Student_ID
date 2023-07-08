@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Document, {
   DocumentInitialProps,
   DocumentContext,
@@ -6,8 +6,8 @@ import Document, {
   Head,
   Main,
   NextScript,
-} from "next/document";
-import { ServerStyleSheet } from "styled-components";
+} from 'next/document';
+import { ServerStyleSheet } from 'styled-components';
 
 export default class MyDocument extends Document {
   static async getInitialProps(
@@ -40,20 +40,24 @@ export default class MyDocument extends Document {
 
   render(): JSX.Element {
     return (
-      <Html lang="pt">
+      <Html lang='pt'>
         <Head>
-          <meta charSet="utf-8" />
+          <meta charSet='utf-8' />
           <link
-            href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
-            rel="stylesheet"
+            href='https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap'
+            rel='stylesheet'
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-            rel="stylesheet"
+            href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap'
+            rel='stylesheet'
           />
 
-          <link rel="icon" href="/favicon.png" />
-          <meta name="description" content="Carterinha Estudantil." />
+          <link rel='icon' href='/favicon.png' />
+          <meta name='description' content='Carterinha Estudantil.' />
+          <meta
+            http-equiv='Content-Security-Policy'
+            content='upgrade-insecure-requests'
+          />
         </Head>
         <body>
           <Main />
