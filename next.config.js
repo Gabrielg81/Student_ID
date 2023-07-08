@@ -2,32 +2,15 @@
  *  @type {import('next').NextConfig}
  */
 const withImages = require("next-images");
-
-module.exports = {
-  reactStrictMode: true,
-  webpack5: false,
-};
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = withImages({
+  reactStrictMode: true,
+  webpack5: false,
   esModule: true,
-});
-
-// module.exports = {
-//     async rewrites() {
-//         return [
-//           {
-//             source: '/api/:path*',
-//             destination: 'https://identidade-estudantil.vercel.app/api/:path*',
-//           },
-//         ]
-//       },
-//   };
-
-module.exports = {
   async headers() {
     return [
       {
-        // matching all API routes
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
@@ -45,4 +28,22 @@ module.exports = {
       },
     ];
   },
-};
+  async rewrites() {
+    return [
+      {
+        source: '/verify-student/:path*',
+        destination: `${process.env.URL}/verify-student/:path*`,
+      },
+    ];
+  },
+  async middleware() {
+    const proxy = createProxyMiddleware('/verify-student', {
+      target: `${process.env.URL}`,
+      changeOrigin: true,
+    });
+
+    return {
+      '/api': proxy,
+    };
+  },
+});
