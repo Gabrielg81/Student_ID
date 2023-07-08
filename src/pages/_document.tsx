@@ -54,10 +54,6 @@ export default class MyDocument extends Document {
 
           <link rel='icon' href='/favicon.png' />
           <meta name='description' content='Carterinha Estudantil.' />
-          <meta
-            http-equiv='Content-Security-Policy'
-            content='upgrade-insecure-requests'
-          />
         </Head>
         <body>
           <Main />
